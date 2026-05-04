@@ -1,85 +1,80 @@
-# Plantilla del Curso: Deep Learning
+# Proyecto Final – Tasa personalizada por perfil mediante IA
 
-Este repositorio es una **plantilla** para el proyecto final del curso de *Advanced Machine Learning*.
-Cada estudiante debe crear su propio repositorio a partir de esta plantilla y trabajar únicamente en el notebook principal desde Google Colab.
-
----
-
-## Pasos para usar esta plantilla (OBLIGATORIO)
-
-### 1. Crear tu repositorio personal
-
-1. Ir a este repositorio plantilla
-2. Hacer clic en el botón verde **“Use this template”**
-3. Crear un nuevo repositorio con el nombre:
-
-   `AML-Final-Apellido-Nombre`
-
-Ejemplo: `AML-Final-Marino-C.`
+## CENTRUM PUCP · Deep Learning · Módulo 4
 
 ---
 
-### 2. Trabajar SOLO en el notebook desde Colab
+### Descripción del proyecto
 
-1. En tu repositorio, entrar a la carpeta `notebooks/`
-2. Abrir el archivo: `final_project.ipynb`
-3. Hacer clic en **“Open in Colab”**
-4. Desarrollar todo tu proyecto dentro de este notebook
+Este proyecto desarrolla un modelo predictivo que genera una **tasa de interés (TEA) personalizada** para cada cliente de Préstamos con Garantía Hipotecaria (PGH), reemplazando el tarifario estático tradicional por uno dinámico basado en Machine Learning y Deep Learning.
 
-No es necesario usar comandos de git ni terminal.
+Se utilizó un dataset sintético de 3,800 contratos con 160 variables que incluyen perfil del cliente, características del préstamo e inmueble, y comportamiento de pago mes a mes (análisis de cosechas).
+
+### Objetivos
+
+- Predecir la tasa TEA óptima ajustada por riesgo para cada perfil individual.
+- Comparar el rendimiento entre modelos de Machine Learning y Deep Learning.
+- Demostrar la superioridad del pricing dinámico sobre el tarifario estático por segmentos.
+- Analizar la interpretabilidad del modelo mediante SHAP.
+
+### Modelos implementados
+
+1. **XGBoost** (Gradient Boosting) — Baseline de Machine Learning
+2. **Red Neuronal Profunda (DNN)** — Con BatchNormalization, Dropout y regularización L2
+3. **DNN con Embeddings Categóricos** — Representaciones aprendidas de variables como zona, sector laboral y tipo de inmueble
+
+Se aplicó ingeniería de features sobre las cosechas de pago (promedios de atraso, volatilidad, tendencias) y variables de interacción (score × LTV, score × DTI).
+
+### Resultados
+
+Comparación de modelos:
+
+| Modelo | MAE (pp) | RMSE (pp) | R² | MAPE |
+|--------|----------|-----------|------|------|
+| XGBoost | 0.3705 | 0.4786 | 0.9485 | 3.10% |
+| DNN Simple | 0.5558 | 0.6978 | 0.8905 | 4.55% |
+| DNN + Embeddings | 0.5320 | 0.6621 | 0.9014 | 4.36% |
+
+**XGBoost** obtuvo el mejor desempeño, consistente con la literatura para datos tabulares con volúmenes moderados. El tarifario dinámico reduce el error en un **74.8%** frente al enfoque estático por segmentos (MAE de 2.11 pp → 0.37 pp).
+
+### Interpretabilidad
+
+Se utilizó **SHAP** con XGBoost para analizar la importancia de las variables. Las features más determinantes fueron: score crediticio, LTV, comportamiento de atraso temprano, ratio deuda/ingreso y zona geográfica.
+
+### Estructura del repositorio
+
+```
+├── notebooks/
+│   └── final_project.ipynb      # Notebook principal ejecutable
+├── data/
+│   └── pgh_dataset_sintetico.csv # Dataset sintético (Google Drive)
+├── README.md                     # Este archivo
+```
+
+### Tecnologías utilizadas
+
+- Python 3.12
+- Scikit-learn
+- XGBoost
+- TensorFlow / Keras
+- SHAP
+- Matplotlib, Seaborn
+- Pandas, NumPy
+
+### Posibles mejoras
+
+- Aumentar el volumen del dataset para potenciar los modelos de Deep Learning.
+- Incorporar variables macroeconómicas externas (tasa de referencia BCRP, inflación).
+- Hyperparameter tuning más exhaustivo con Optuna o Bayesian Optimization.
+- Implementar A/B testing para medir impacto real en conversión y margen.
+- Aplicar técnicas de fairness para evitar sesgos en la asignación de tasas.
+
+### Conclusión
+
+El proyecto demuestra que un tarifario dinámico basado en IA supera significativamente al enfoque estático, permitiendo asignar tasas personalizadas que reflejan el riesgo real de cada perfil. XGBoost resultó el modelo más preciso para este volumen de datos, aunque las redes neuronales con embeddings mostraron capacidad de capturar relaciones complejas entre variables categóricas, con potencial de escalar mejor ante datasets más grandes.
 
 ---
 
-### 3. Guardar cambios directamente en GitHub
-
-Dentro de Colab:
-
-* Ir a **File → Save a copy in GitHub**
-* Seleccionar tu repositorio personal
-* Confirmar sobrescribir el notebook
-
-De esta forma, tu trabajo quedará guardado automáticamente en GitHub.
-
----
-
-## Estructura del repositorio (NO modificar)
-
-* `notebooks/` → Notebook principal del proyecto
-* `src/` → Código auxiliar (opcional)
-* `data/` → Solo instrucciones del dataset (no subir datos grandes)
-* `results/` → Resultados y métricas
-* `figures/` → Gráficos generados
-* `report/` → Reporte final (PDF o Markdown)
-
-Los estudiantes deben principalmente trabajar en:
-`notebooks/final_project.ipynb`
-
----
-
-## Reglas importantes
-
-* No subir datasets grandes o datos sensibles
-* El notebook debe poder ejecutarse en Colab
-* Incluir visualizaciones y evaluación del modelo
-* Mantener el código organizado y reproducible
-
----
-
-## Entrega final
-
-Cada estudiante deberá enviar:
-
-1. El enlace de su repositorio en GitHub
-2. El notebook final completamente ejecutable
-3. (Opcional) un tag final: `v1.0-final`
-
----
-
-## Objetivo pedagógico
-
-Esta estructura busca que los estudiantes:
-
-* Practiquen reproducibilidad en ML
-* Mantengan organización profesional del código
-* Usen GitHub como portafolio académico
-* Integren experimentación, evaluación y visualización en un único flujo reproducible
+**Alumno:** Hinojosa Garay, Ronaldiñho  
+**Programa de Especialización en IA aplicada a los negocios:** Módulo de Deep Learning – CENTRUM PUCP  
+**Fecha:** Mayo 2026
